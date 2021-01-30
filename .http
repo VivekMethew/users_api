@@ -1,0 +1,2 @@
+## get user
+http://localhost:3000/users?id=5
