@@ -1,0 +1,12 @@
+{
+    "name": "users",
+    "version": "0.0.1",
+    "description": "'This site is get all type users'",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "server": "nodemon app.js"
+    },
+    "author": "",
+    "license": "ISC"
+}
