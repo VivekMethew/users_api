@@ -1,2 +1,26 @@
-## get user
-http://localhost:3000/users?id=5
+
+GET http://localhost:3000/users
+
+
+###
+POST  http://localhost:3000/users
+content-type: application/json
+
+{
+    "fname": "vivek",
+    "lname": "kumar",
+    "email": "vivekmethew@gmail.com",
+    "phone": "9718546885"
+}
+
+###
+
+POST http://localhost:3000/test
+content-type: application/x-www-form-urlencoded
+
+name=vivek&price=446
+
+###
+POST http://localhost:3000/profile
+
+
