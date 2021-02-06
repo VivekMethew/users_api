@@ -1,36 +1,43 @@
+require('dotenv').config()
 const express = require('express')
 const router = require('./routes/routes')
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose');
 const createError = require('http-errors')
-const path = require('path')
+const morgan = require('morgan')
 const app = express()
 const server = require('http').createServer(app)
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5000
 
-mongoose.connect('mongodb+srv://cluster0.5xmnw.mongodb.net/<dbname>?retryWrites=true&w=majority', {
-    dbName: 'users_api',
-    user: 'users_db',
-    pass: 'Dinh64qjk6Exvl58',
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: true
-}).then(() => {
-    console.log('connected')
-});
+require('./config/mongoose.connection')()
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use('/upload', express.static(path.join(__dirname, 'upload')))
+app.use(function(req, res, next) {
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'Origin,X-Requested-With,content-type,token,Accept, Authorization')
+        // Set to true if you need the website to include cookies in the requests sent
+        // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    if (req.method === 'OPTIONS') {
+        // Request methods you wish to allow
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+        return res.status(200).json({})
+    }
+    req.headers['content-type'] = req.headers['content-type'] || 'application/json';
+    next();
+});
+app.use(morgan('dev'))
+
 
 app.use(router)
 
 app.use((req, res, next) => {
-    // const err = new Error('Not Found')
-    // err.status = 404
     next(createError(404, "Not Found Route"))
 })
 
